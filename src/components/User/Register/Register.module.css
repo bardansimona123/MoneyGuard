@@ -1,0 +1,172 @@
+/* ------------------BACKGROUND------------------ */
+.customBackground {
+  background-image: url("/BackgroundRegister.png");
+  background-size: cover;
+
+  background-repeat: no-repeat;
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.containerRegister {
+  margin-top: 10%;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ------------------CARD ------------------ */
+.customCard {
+  border-radius: 30px !important;
+  background-color: rgba(255, 255, 255, 0.2) !important;
+  margin: 2rem;
+}
+
+.customCardBody {
+  padding: 2rem;
+}
+
+/* ------------------BACK BUTTON ------------------ */
+.customBackButton {
+  display: inline-flex;
+  align-items: center;
+  background-color: #0371ee79;
+  color: #fff;
+  outline: none;
+  border: none;
+  border-radius: 20px;
+  padding: 10px 20px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.customBackButton:hover {
+  background-color: #274b7791;
+  outline: solid 1px white;
+}
+
+.customBackButton:active {
+  transform: scale(0.98);
+}
+
+.customBackIcon {
+  margin-right: 8px;
+  font-size: 1.5rem;
+}
+
+/* ------------------FORM ELEMENTS ------------------ */
+.customTitle {
+  color: #fff;
+  text-align: center;
+  font-size: 2rem;
+  margin-bottom: 2rem;
+}
+
+.customLabel2 label {
+  color: rgba(255, 255, 255, 0.842) !important;
+  font-weight: bold;
+  font-size: 1.2rem;
+}
+
+.inputWrapper {
+  position: relative;
+  margin-bottom: 1.5rem;
+  width: 70%;
+}
+
+@media (max-width: 768px) {
+  .inputWrapper {
+    width: 90%;
+  }
+}
+
+.customInput {
+  width: 130%;
+  padding: 10px;
+  font-size: 16px;
+  border: 1px solid rgb(206, 205, 205);
+  border-radius: 4px;
+  background-color: transparent;
+  color: white;
+  transition: all 0.3s ease;
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+.customLabel {
+  position: absolute;
+  top: 50%;
+  left: 10px;
+  transform: translateY(-50%);
+  font-size: 16px;
+  color: rgb(177, 177, 177);
+  pointer-events: none;
+  transition: all 0.3s ease;
+}
+
+.customInput:focus,
+.customInput:not(:placeholder-shown) {
+  border: none;
+  outline: none;
+  border: 2px solid rgb(255, 255, 255);
+  background-color: rgba(178, 178, 179, 0.342);
+}
+
+.customInput:focus + .customLabel,
+.customInput:not(:placeholder-shown) + .customLabel {
+  top: -12px;
+  left: 5px;
+  font-size: 12px;
+  color: white;
+}
+
+.customInput::placeholder {
+  color: transparent;
+}
+
+/* ------------------ERROR AND SUCCESS MESSAGES ------------------ */
+.errorMessage {
+  color: red;
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
+.successMessage {
+  color: green;
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
+/* ------------------SUBMIT BUTTON ------------------ */
+.customSubmitButton {
+  background-color: #0371ee79;
+  border-radius: 20px;
+  padding: 10px 20px;
+  transition: background-color 0.3s ease-in-out;
+  color: white;
+  width: 30%;
+  text-align: center;
+  outline: none;
+  border: none;
+  margin-top: 2rem;
+}
+
+.customSubmitButton:hover {
+  background-color: #274b77;
+  outline: solid 2px white;
+}
+
+.customSubmitButton:active {
+  transform: scale(0.98);
+}
+
+/* ------------------IMAGE SECTION ------------------ */
+.logoImage {
+  width: 15rem;
+  height: auto;
+  margin: 0 auto;
+}

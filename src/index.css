@@ -1,0 +1,12 @@
+.backgroundBody {
+  min-height: 100vh;
+  background: linear-gradient(
+    180deg,
+    rgb(30, 2, 66) 17%,
+    rgb(59, 7, 117) 64%,
+    rgb(92, 63, 145) 87%,
+    rgb(60, 5, 85) 97%
+  );
+  background-repeat: no-repeat;
+  background-position: center bottom;
+}
