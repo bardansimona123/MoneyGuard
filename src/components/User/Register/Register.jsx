@@ -4,6 +4,9 @@ import * as Yup from "yup";
 import { useNavigate } from "react-router-dom";
 import styles from "./Register.module.css";
 import Logo from "../../../../public/Logo.svg";
+import axios from "axios";
+
+const API_URL = "https://671fb877e7a5792f052f531b.mockapi.io/users"; // Înlocuiește cu URL-ul tău
 
 function Register() {
   const navigate = useNavigate();
@@ -29,10 +32,13 @@ function Register() {
         .oneOf([Yup.ref("password"), null], "Passwords must match")
         .required("Please confirm your password"),
     }),
-    onSubmit: (values) => {
+    onSubmit: async (values) => {
       try {
-        const existingUsers = JSON.parse(localStorage.getItem("users")) || [];
-        const userExists = existingUsers.some(
+        // Obține toți utilizatorii din Mockapi.io
+        const response = await axios.get(API_URL);
+
+        // Verifică local dacă emailul există deja
+        const userExists = response.data.some(
           (user) => user.email === values.email
         );
 
@@ -40,14 +46,12 @@ function Register() {
           setError("Email is already registered");
         } else {
           const newUser = {
-            name: values.name,
+            username: values.name,
             email: values.email,
             password: values.password,
+            token: `mockToken-${Math.random().toString(36).substr(2)}`,
           };
-          localStorage.setItem(
-            "users",
-            JSON.stringify([...existingUsers, newUser])
-          );
+          await axios.post(API_URL, newUser);
           navigate("/login");
         }
       } catch (error) {
@@ -82,11 +86,13 @@ function Register() {
                       placeholder=" "
                       type="text"
                       className={styles.customInput}
+                      id="name" // Atribuie un id unic
                       name="name"
                       onChange={formik.handleChange}
+                      onBlur={formik.handleBlur}
                       value={formik.values.name}
                     />
-                    <label htmlFor="form1" className={styles.customLabel}>
+                    <label htmlFor="name" className={styles.customLabel}>
                       Your Name
                     </label>
                     {formik.touched.name && formik.errors.name && (
@@ -99,11 +105,13 @@ function Register() {
                       placeholder=" "
                       type="email"
                       className={styles.customInput}
+                      id="email" // Atribuie un id unic
                       name="email"
                       onChange={formik.handleChange}
+                      onBlur={formik.handleBlur}
                       value={formik.values.email}
                     />
-                    <label htmlFor="form1" className={styles.customLabel}>
+                    <label htmlFor="email" className={styles.customLabel}>
                       Your Email
                     </label>
                     {formik.touched.email && formik.errors.email && (
@@ -116,11 +124,13 @@ function Register() {
                       placeholder=" "
                       type="password"
                       className={styles.customInput}
+                      id="password" // Atribuie un id unic
                       name="password"
                       onChange={formik.handleChange}
+                      onBlur={formik.handleBlur}
                       value={formik.values.password}
                     />
-                    <label htmlFor="form1" className={styles.customLabel}>
+                    <label htmlFor="password" className={styles.customLabel}>
                       Password
                     </label>
                     {formik.touched.password && formik.errors.password && (
@@ -135,11 +145,16 @@ function Register() {
                       placeholder=" "
                       type="password"
                       className={styles.customInput}
+                      id="confirmPassword" // Atribuie un id unic
                       name="confirmPassword"
                       onChange={formik.handleChange}
+                      onBlur={formik.handleBlur}
                       value={formik.values.confirmPassword}
                     />
-                    <label htmlFor="form1" className={styles.customLabel}>
+                    <label
+                      htmlFor="confirmPassword"
+                      className={styles.customLabel}
+                    >
                       Repeat your password
                     </label>
                     {formik.touched.confirmPassword &&
