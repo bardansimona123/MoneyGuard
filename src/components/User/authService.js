@@ -26,13 +26,27 @@ export const login = async (email, password) => {
 // Înregistrare utilizator
 export const register = async (name, email, password) => {
   try {
+    // Verifică dacă utilizatorul există deja
+    const existingUsersResponse = await axios.get(API_URL, {
+      params: { email },
+    });
+    const userExists = existingUsersResponse.data.some(
+      (user) => user.email === email
+    );
+
+    if (userExists) {
+      throw new Error("Email is already registered");
+    }
+
     const token = `mockToken-${Math.random().toString(36).substr(2)}`;
-    const response = await axios.post(API_URL, {
+    const newUser = {
       username: name,
       email,
       password,
       token,
-    });
+    };
+
+    const response = await axios.post(API_URL, newUser);
     localStorage.setItem("token", token);
     return response.data;
   } catch (error) {
@@ -40,3 +54,12 @@ export const register = async (name, email, password) => {
     throw error;
   }
 };
+
+// Logout utilizator
+export const logout = () => {
+  localStorage.removeItem("token");
+  localStorage.removeItem("userId");
+};
+
+// Obține token-ul curent
+export const getToken = () => localStorage.getItem("token");

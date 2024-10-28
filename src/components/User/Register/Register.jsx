@@ -4,9 +4,7 @@ import * as Yup from "yup";
 import { useNavigate } from "react-router-dom";
 import styles from "./Register.module.css";
 import Logo from "../../../../public/Logo.svg";
-import axios from "axios";
-
-const API_URL = "https://671fb877e7a5792f052f531b.mockapi.io/users"; // Înlocuiește cu URL-ul tău
+import { register as registerUser } from "../authService";
 
 function Register() {
   const navigate = useNavigate();
@@ -32,31 +30,20 @@ function Register() {
         .oneOf([Yup.ref("password"), null], "Passwords must match")
         .required("Please confirm your password"),
     }),
-onSubmit: async (values) => {
-  console.log("Register form submitted with values:", values); // Verifică dacă funcția este apelată
-  try {
-    const response = await axios.get(API_URL);
-    const userExists = response.data.some((user) => user.email === values.email);
-
-    if (userExists) {
-      setError("Email is already registered");
-    } else {
-      const newUser = {
-        username: values.name,
-        email: values.email,
-        password: values.password,
-        token: `mockToken-${Math.random().toString(36).substr(2)}`,
-      };
-      await axios.post(API_URL, newUser);
-      console.log("User registered successfully:", newUser);
-      navigate("/login");
-    }
-  } catch (error) {
-    console.error("Error during registration:", error);
-    setError("Something went wrong. Please try again.");
-  }
-},
-,
+    onSubmit: async (values) => {
+      try {
+        const user = await registerUser(
+          values.name,
+          values.email,
+          values.password
+        );
+        console.log("User registered successfully:", user);
+        navigate("/login");
+      } catch (error) {
+        console.error("Error during registration:", error);
+        setError("Something went wrong. Please try again.");
+      }
+    },
   });
 
   const handleBack = () => {
@@ -74,18 +61,16 @@ onSubmit: async (values) => {
                 <span className={styles.customBackIcon}></span> Back
               </button>
             </div>
-
             <div className={styles.rowPosition}>
               <form onSubmit={formik.handleSubmit}>
                 <div>
                   <p className={styles.customTitle}>Register</p>
-
                   <div className={styles.inputWrapper}>
                     <input
                       placeholder=" "
                       type="text"
                       className={styles.customInput}
-                      id="name" // Atribuie un id unic
+                      id="name"
                       name="name"
                       onChange={formik.handleChange}
                       onBlur={formik.handleBlur}
@@ -98,13 +83,12 @@ onSubmit: async (values) => {
                       <div className={styles.error}>{formik.errors.name}</div>
                     )}
                   </div>
-
                   <div className={styles.inputWrapper}>
                     <input
                       placeholder=" "
                       type="email"
                       className={styles.customInput}
-                      id="email" // Atribuie un id unic
+                      id="email"
                       name="email"
                       onChange={formik.handleChange}
                       onBlur={formik.handleBlur}
@@ -117,13 +101,12 @@ onSubmit: async (values) => {
                       <div className={styles.error}>{formik.errors.email}</div>
                     )}
                   </div>
-
                   <div className={styles.inputWrapper}>
                     <input
                       placeholder=" "
                       type="password"
                       className={styles.customInput}
-                      id="password" // Atribuie un id unic
+                      id="password"
                       name="password"
                       onChange={formik.handleChange}
                       onBlur={formik.handleBlur}
@@ -138,13 +121,12 @@ onSubmit: async (values) => {
                       </div>
                     )}
                   </div>
-
                   <div className={styles.inputWrapper}>
                     <input
                       placeholder=" "
                       type="password"
                       className={styles.customInput}
-                      id="confirmPassword" // Atribuie un id unic
+                      id="confirmPassword"
                       name="confirmPassword"
                       onChange={formik.handleChange}
                       onBlur={formik.handleBlur}
@@ -163,16 +145,13 @@ onSubmit: async (values) => {
                         </div>
                       )}
                   </div>
-
                   <div className={styles.customLabel2}>
                     <input type="checkbox" id="flexCheckDefault" />
                     <label htmlFor="flexCheckDefault">
                       I agree to all statements in the Terms of service
                     </label>
                   </div>
-
                   {error && <p className={styles.error}>{error}</p>}
-
                   <button type="submit" className={styles.customSubmitButton}>
                     Register
                   </button>
