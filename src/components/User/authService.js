@@ -1,6 +1,7 @@
 import axios from "axios";
 
-const API_URL = "https://api.jsonbin.io/v3/b/671ff97aad19ca34f8c01e2e";
+const API_URL =
+  "https://cors-anywhere.herokuapp.com/https://api.jsonbin.io/v3/b/671ff97aad19ca34f8c01e2e";
 const MASTER_KEY =
   "$2a$10$UL1M1GzfgYYwn5l9vksKJuWdBUVfSVoa0maU3yjE6WI6yp8b.b6iy";
 
@@ -15,7 +16,6 @@ export const register = async (name, email, password) => {
       token,
     };
 
-    // Obține utilizatorii existenți
     const response = await axios.get(API_URL, {
       headers: {
         "X-Master-Key": MASTER_KEY,
@@ -23,7 +23,6 @@ export const register = async (name, email, password) => {
     });
     const users = response.data.record.users;
 
-    // Adaugă noul utilizator în array și trimite înapoi la JSONBin
     users.push(newUser);
 
     await axios.put(
@@ -59,10 +58,8 @@ export const login = async (email, password) => {
     );
 
     if (user) {
-      console.log("Autentificare reușită pentru utilizatorul:", user);
       return user;
     } else {
-      console.error("Autentificare eșuată: credențiale invalide");
       throw new Error("Invalid credentials");
     }
   } catch (error) {
