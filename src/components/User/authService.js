@@ -1,16 +1,15 @@
-// src/services/authService.js
 import axios from "axios";
 
 const API_URL = "https://671fb877e7a5792f052f531b.mockapi.io/users"; // Înlocuiește cu URL-ul tău exact
 
 // Autentificare utilizator
 export const login = async (email, password) => {
-  const response = await axios.get(`${API_URL}`, {
-    params: { email, password },
-  });
+  const response = await axios.get(API_URL); // Obține toți utilizatorii
+  const user = response.data.find(
+    (user) => user.email === email && user.password === password
+  );
 
-  const user = response.data[0]; // Căutăm primul utilizator care corespunde
-  if (user && user.password === password) {
+  if (user) {
     localStorage.setItem("token", user.token);
     localStorage.setItem("userId", user.id);
     return user;
@@ -22,7 +21,7 @@ export const login = async (email, password) => {
 // Înregistrare utilizator
 export const register = async (name, email, password) => {
   const token = `mockToken-${Math.random().toString(36).substr(2)}`;
-  const response = await axios.post(`${API_URL}`, {
+  const response = await axios.post(API_URL, {
     username: name,
     email,
     password,
