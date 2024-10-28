@@ -4,6 +4,7 @@ import * as Yup from "yup";
 import { useNavigate } from "react-router-dom";
 import styles from "./Register.module.css";
 import Logo from "../../../../public/Logo.svg";
+import { register as registerUser } from "../authService";
 
 function Register() {
   const navigate = useNavigate();
@@ -29,28 +30,18 @@ function Register() {
         .oneOf([Yup.ref("password"), null], "Passwords must match")
         .required("Please confirm your password"),
     }),
-    onSubmit: (values) => {
+    onSubmit: async (values) => {
       try {
-        const existingUsers = JSON.parse(localStorage.getItem("users")) || [];
-        const userExists = existingUsers.some(
-          (user) => user.email === values.email
+        // Trimite datele de înregistrare la MockAPI
+        const user = await registerUser(
+          values.name,
+          values.email,
+          values.password
         );
-
-        if (userExists) {
-          setError("Email is already registered");
-        } else {
-          const newUser = {
-            name: values.name,
-            email: values.email,
-            password: values.password,
-          };
-          localStorage.setItem(
-            "users",
-            JSON.stringify([...existingUsers, newUser])
-          );
-          navigate("/login");
-        }
+        console.log("User registered successfully:", user);
+        navigate("/login"); // Navighează la pagina de login
       } catch (error) {
+        console.error("Error during registration:", error);
         setError("Something went wrong. Please try again.");
       }
     },
@@ -71,56 +62,61 @@ function Register() {
                 <span className={styles.customBackIcon}></span> Back
               </button>
             </div>
-
             <div className={styles.rowPosition}>
               <form onSubmit={formik.handleSubmit}>
                 <div>
                   <p className={styles.customTitle}>Register</p>
-
                   <div className={styles.inputWrapper}>
                     <input
                       placeholder=" "
                       type="text"
                       className={styles.customInput}
+                      id="name"
                       name="name"
                       onChange={formik.handleChange}
+                      onBlur={formik.handleBlur}
                       value={formik.values.name}
+                      autoComplete="name"
                     />
-                    <label htmlFor="form1" className={styles.customLabel}>
+                    <label htmlFor="name" className={styles.customLabel}>
                       Your Name
                     </label>
                     {formik.touched.name && formik.errors.name && (
                       <div className={styles.error}>{formik.errors.name}</div>
                     )}
                   </div>
-
                   <div className={styles.inputWrapper}>
                     <input
                       placeholder=" "
                       type="email"
                       className={styles.customInput}
+                      id="email"
                       name="email"
                       onChange={formik.handleChange}
+                      onBlur={formik.handleBlur}
                       value={formik.values.email}
+                      autoComplete="email"
                     />
-                    <label htmlFor="form1" className={styles.customLabel}>
+                    <label htmlFor="email" className={styles.customLabel}>
                       Your Email
                     </label>
                     {formik.touched.email && formik.errors.email && (
                       <div className={styles.error}>{formik.errors.email}</div>
                     )}
                   </div>
-
                   <div className={styles.inputWrapper}>
                     <input
                       placeholder=" "
                       type="password"
                       className={styles.customInput}
+                      id="password"
                       name="password"
                       onChange={formik.handleChange}
+                      onBlur={formik.handleBlur}
                       value={formik.values.password}
+                      autoComplete="new-password"
                     />
-                    <label htmlFor="form1" className={styles.customLabel}>
+                    <label htmlFor="password" className={styles.customLabel}>
                       Password
                     </label>
                     {formik.touched.password && formik.errors.password && (
@@ -129,17 +125,22 @@ function Register() {
                       </div>
                     )}
                   </div>
-
                   <div className={styles.inputWrapper}>
                     <input
                       placeholder=" "
                       type="password"
                       className={styles.customInput}
+                      id="confirmPassword"
                       name="confirmPassword"
                       onChange={formik.handleChange}
+                      onBlur={formik.handleBlur}
                       value={formik.values.confirmPassword}
+                      autoComplete="new-password"
                     />
-                    <label htmlFor="form1" className={styles.customLabel}>
+                    <label
+                      htmlFor="confirmPassword"
+                      className={styles.customLabel}
+                    >
                       Repeat your password
                     </label>
                     {formik.touched.confirmPassword &&
@@ -149,16 +150,13 @@ function Register() {
                         </div>
                       )}
                   </div>
-
                   <div className={styles.customLabel2}>
                     <input type="checkbox" id="flexCheckDefault" />
                     <label htmlFor="flexCheckDefault">
                       I agree to all statements in the Terms of service
                     </label>
                   </div>
-
                   {error && <p className={styles.error}>{error}</p>}
-
                   <button type="submit" className={styles.customSubmitButton}>
                     Register
                   </button>

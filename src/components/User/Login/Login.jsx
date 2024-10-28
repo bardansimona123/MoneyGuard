@@ -5,6 +5,9 @@ import { Link, useNavigate } from "react-router-dom";
 import PropTypes from "prop-types";
 import styles from "./Login.module.css";
 import Logo from "../../../../public/Logo.svg";
+import axios from "axios";
+
+const API_URL = "https://671fb877e7a5792f052f531b.mockapi.io/users"; // Înlocuiește cu URL-ul tău
 
 function InputField({
   type,
@@ -19,8 +22,7 @@ function InputField({
 }) {
   return (
     <div className={styles.inputContainer}>
-      {error && <div className={styles.errorMessage}>{error}</div>}{" "}
-      {/* Mesajul de eroare deasupra */}
+      {error && <div className={styles.errorMessage}>{error}</div>}
       <div className={styles.inputWrapper}>
         <input
           type={type}
@@ -67,19 +69,17 @@ function Login() {
         .required("Email is required"),
       password: Yup.string().required("Password is required"),
     }),
-    onSubmit: (values) => {
+    onSubmit: async (values) => {
       try {
-        const users = JSON.parse(localStorage.getItem("users")) || [];
-        const user = users.find(
-          (user) =>
-            user.email === values.email && user.password === values.password
+        const response = await axios.get(API_URL, {
+          params: { email: values.email },
+        });
+        const user = response.data.find(
+          (user) => user.password === values.password
         );
 
         if (user) {
-          localStorage.setItem(
-            "authToken",
-            JSON.stringify({ email: user.email })
-          );
+          localStorage.setItem("authToken", user.token);
           navigate("/dashboard");
         } else {
           setError("Invalid username or password");
