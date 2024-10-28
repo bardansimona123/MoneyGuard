@@ -6,7 +6,10 @@ import styles from "./ForgotPassword.module.css";
 import Logo from "../../../../public/Logo.svg";
 import axios from "axios";
 
-const API_URL = "https://671fb877e7a5792f052f531b.mockapi.io/users"; // Înlocuiește cu URL-ul tău
+const API_URL =
+  "https://thingproxy.freeboard.io/fetch/https://api.jsonbin.io/v3/b/671ff97aad19ca34f8c01e2e";
+const MASTER_KEY =
+  "$2a$10$UL1M1GzfgYYwn5l9vksKJuWdBUVfSVoa0maU3yjE6WI6yp8b.b6iy";
 
 function ForgotPassword() {
   const [message, setMessage] = useState("");
