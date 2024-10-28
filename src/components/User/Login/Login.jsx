@@ -73,23 +73,31 @@ function Login() {
       password: Yup.string().required("Password is required"),
     }),
     onSubmit: async (values) => {
+      console.log("Submitting login form with values:", values);
       try {
         const response = await axios.get(API_URL, {
           headers: { "X-Master-Key": MASTER_KEY },
         });
-        const users = response.data.record.users;
+        console.log("Received response from API:", response);
+
+        const users = response.data.record.users || [];
+        console.log("Fetched users:", users);
+
         const user = users.find(
           (user) =>
             user.email === values.email && user.password === values.password
         );
 
         if (user) {
+          console.log("Login successful, user found:", user);
           localStorage.setItem("authToken", user.token);
           navigate("/dashboard");
         } else {
+          console.warn("Invalid credentials provided:", values);
           setError("Invalid username or password");
         }
       } catch (error) {
+        console.error("Error during login:", error);
         setError("Something went wrong. Please try again.");
       }
     },
