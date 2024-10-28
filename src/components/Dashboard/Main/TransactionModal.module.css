@@ -1,0 +1,85 @@
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+  }
+  
+  .modalContent {
+    background-color: #2a2e3e;
+    border-radius: 10px;
+    width: 400px;
+    padding: 20px;
+    color: #ffffff;
+    text-align: center;
+  }
+  
+  h2 {
+    font-size: 1.5rem;
+    color: #ffffff;
+    margin-bottom: 20px;
+  }
+  
+  .typeSelector {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+  
+  .typeSelector button {
+    background-color: #3c3f51;
+    border: none;
+    color: #ffffff;
+    padding: 10px 20px;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .typeSelector button.active {
+    background-color: #f39c12;
+  }
+  
+  input[type="number"],
+  input[type="date"],
+  input[type="text"],
+  select {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    border-radius: 5px;
+    border: none;
+    background-color: #3c3f51;
+    color: #ffffff;
+  }
+  
+  .addButton {
+    width: 100%;
+    padding: 10px;
+    margin-top: 10px;
+    border: none;
+    border-radius: 5px;
+    background-image: linear-gradient(90deg, #f39c12, #e74c3c);
+    color: #ffffff;
+    cursor: pointer;
+    font-weight: bold;
+  }
+  
+  .cancelButton {
+    width: 100%;
+    padding: 10px;
+    margin-top: 10px;
+    border: none;
+    border-radius: 5px;
+    background-color: #7f8c8d;
+    color: #ffffff;
+    cursor: pointer;
+  }
+  

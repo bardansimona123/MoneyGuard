@@ -1,15 +1,16 @@
+// Sidebar.jsx
 import React from "react";
 import styles from "./Sidebar.module.css";
 
-const Sidebar = () => {
+const Sidebar = ({ onSectionChange }) => { // Modificare: adaugă onSectionChange ca prop
   return (
     <aside className={styles.sidebar}>
       <ul>
-        <li className={styles.menuItem}>
+        <li className={styles.menuItem} onClick={() => onSectionChange("Home")}> {/* Modificare: folosește onSectionChange */}
           <span className={styles.icon}>🏠</span>
           Home
         </li>
-        <li className={styles.menuItem}>
+        <li className={styles.menuItem} onClick={() => onSectionChange("Statistics")}> {/* Modificare: folosește onSectionChange */}
           <span className={styles.icon}>📊</span>
           Statistics
         </li>
