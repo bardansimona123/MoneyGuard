@@ -75,6 +75,7 @@ function Register() {
                       onChange={formik.handleChange}
                       onBlur={formik.handleBlur}
                       value={formik.values.name}
+                      autoComplete="name"
                     />
                     <label htmlFor="name" className={styles.customLabel}>
                       Your Name
@@ -93,6 +94,7 @@ function Register() {
                       onChange={formik.handleChange}
                       onBlur={formik.handleBlur}
                       value={formik.values.email}
+                      autoComplete="email"
                     />
                     <label htmlFor="email" className={styles.customLabel}>
                       Your Email
@@ -111,6 +113,7 @@ function Register() {
                       onChange={formik.handleChange}
                       onBlur={formik.handleBlur}
                       value={formik.values.password}
+                      autoComplete="new-password"
                     />
                     <label htmlFor="password" className={styles.customLabel}>
                       Password
@@ -131,6 +134,7 @@ function Register() {
                       onChange={formik.handleChange}
                       onBlur={formik.handleBlur}
                       value={formik.values.confirmPassword}
+                      autoComplete="new-password"
                     />
                     <label
                       htmlFor="confirmPassword"
