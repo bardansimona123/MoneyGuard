@@ -32,14 +32,13 @@ function Register() {
     }),
     onSubmit: async (values) => {
       try {
-        // Trimite datele de înregistrare la MockAPI
         const user = await registerUser(
           values.name,
           values.email,
           values.password
         );
         console.log("User registered successfully:", user);
-        navigate("/login"); // Navighează la pagina de login
+        navigate("/login");
       } catch (error) {
         console.error("Error during registration:", error);
         setError("Something went wrong. Please try again.");
