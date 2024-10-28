@@ -32,32 +32,31 @@ function Register() {
         .oneOf([Yup.ref("password"), null], "Passwords must match")
         .required("Please confirm your password"),
     }),
-    onSubmit: async (values) => {
-      try {
-        // Obține toți utilizatorii din Mockapi.io
-        const response = await axios.get(API_URL);
+onSubmit: async (values) => {
+  console.log("Register form submitted with values:", values); // Verifică dacă funcția este apelată
+  try {
+    const response = await axios.get(API_URL);
+    const userExists = response.data.some((user) => user.email === values.email);
 
-        // Verifică local dacă emailul există deja
-        const userExists = response.data.some(
-          (user) => user.email === values.email
-        );
-
-        if (userExists) {
-          setError("Email is already registered");
-        } else {
-          const newUser = {
-            username: values.name,
-            email: values.email,
-            password: values.password,
-            token: `mockToken-${Math.random().toString(36).substr(2)}`,
-          };
-          await axios.post(API_URL, newUser);
-          navigate("/login");
-        }
-      } catch (error) {
-        setError("Something went wrong. Please try again.");
-      }
-    },
+    if (userExists) {
+      setError("Email is already registered");
+    } else {
+      const newUser = {
+        username: values.name,
+        email: values.email,
+        password: values.password,
+        token: `mockToken-${Math.random().toString(36).substr(2)}`,
+      };
+      await axios.post(API_URL, newUser);
+      console.log("User registered successfully:", newUser);
+      navigate("/login");
+    }
+  } catch (error) {
+    console.error("Error during registration:", error);
+    setError("Something went wrong. Please try again.");
+  }
+},
+,
   });
 
   const handleBack = () => {
