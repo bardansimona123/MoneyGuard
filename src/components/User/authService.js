@@ -5,14 +5,15 @@ const API_URL = "https://671fb877e7a5792f052f531b.mockapi.io/users";
 // Înregistrare utilizator - Fără localStorage
 export const register = async (name, email, password) => {
   try {
-    const token = `mockToken-${Math.random().toString(36).substr(2)}`;
+    const token = `mockToken-${Math.random().toString(36).substr(2)}`; // Token generat
     const response = await axios.post(API_URL, {
       username: name,
       email,
       password,
-      token, // Generăm un token temporar pentru testare
+      token,
     });
-    return response.data; // Returnăm datele utilizatorului nou creat
+    // În loc să stocăm în localStorage, returnăm datele utilizatorului pentru a fi folosite după autentificare
+    return response.data;
   } catch (error) {
     console.error("Error during registration:", error);
     throw error;
