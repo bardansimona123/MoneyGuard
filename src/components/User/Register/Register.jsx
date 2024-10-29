@@ -31,6 +31,7 @@ function Register() {
         .required("Please confirm your password"),
     }),
     onSubmit: async (values) => {
+      console.log("Submitting registration form with values:", values);
       try {
         const user = await registerUser(
           values.name,
@@ -47,6 +48,7 @@ function Register() {
   });
 
   const handleBack = () => {
+    console.log("Navigating back to previous page...");
     navigate(-1);
   };
 

@@ -7,7 +7,10 @@ import styles from "./Login.module.css";
 import Logo from "../../../../public/Logo.svg";
 import axios from "axios";
 
-const API_URL = "https://671fb877e7a5792f052f531b.mockapi.io/users"; // Înlocuiește cu URL-ul tău
+const API_URL =
+  "https://thingproxy.freeboard.io/fetch/https://api.jsonbin.io/v3/b/671ff97aad19ca34f8c01e2e";
+const MASTER_KEY =
+  "$2a$10$UL1M1GzfgYYwn5l9vksKJuWdBUVfSVoa0maU3yjE6WI6yp8b.b6iy";
 
 function InputField({
   type,
@@ -70,21 +73,31 @@ function Login() {
       password: Yup.string().required("Password is required"),
     }),
     onSubmit: async (values) => {
+      console.log("Submitting login form with values:", values);
       try {
         const response = await axios.get(API_URL, {
-          params: { email: values.email },
+          headers: { "X-Master-Key": MASTER_KEY },
         });
-        const user = response.data.find(
-          (user) => user.password === values.password
+        console.log("Received response from API:", response);
+
+        const users = response.data.record.users || [];
+        console.log("Fetched users:", users);
+
+        const user = users.find(
+          (user) =>
+            user.email === values.email && user.password === values.password
         );
 
         if (user) {
+          console.log("Login successful, user found:", user);
           localStorage.setItem("authToken", user.token);
           navigate("/dashboard");
         } else {
+          console.warn("Invalid credentials provided:", values);
           setError("Invalid username or password");
         }
       } catch (error) {
+        console.error("Error during login:", error);
         setError("Something went wrong. Please try again.");
       }
     },

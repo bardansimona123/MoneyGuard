@@ -1,36 +1,75 @@
+// src/services/authService.js
 import axios from "axios";
 
-const API_URL = "https://671fb877e7a5792f052f531b.mockapi.io/users";
+const API_URL =
+  "https://cors.bridged.cc/https://api.jsonbin.io/v3/b/671ff97aad19ca34f8c01e2e";
+const MASTER_KEY =
+  "$2a$10$UL1M1GzfgYYwn5l9vksKJuWdBUVfSVoa0maU3yjE6WI6yp8b.b6iy";
 
-// Înregistrare utilizator - Fără localStorage
+// Înregistrare utilizator
 export const register = async (name, email, password) => {
   try {
-    const token = `mockToken-${Math.random().toString(36).substr(2)}`; // Token generat
-    const response = await axios.post(API_URL, {
+    console.log("Attempting to register...");
+    const token = `mockToken-${Math.random().toString(36).substr(2)}`;
+    const newUser = {
       username: name,
       email,
       password,
       token,
+    };
+
+    console.log("Fetching existing users...");
+    const response = await axios.get(API_URL, {
+      headers: {
+        "X-Master-Key": MASTER_KEY,
+      },
     });
-    // În loc să stocăm în localStorage, returnăm datele utilizatorului pentru a fi folosite după autentificare
-    return response.data;
+    const users = response.data.record.users || [];
+    console.log("Existing users:", users);
+
+    users.push(newUser);
+
+    console.log("Updating user list...");
+    await axios.put(
+      API_URL,
+      { users },
+      {
+        headers: {
+          "Content-Type": "application/json",
+          "X-Master-Key": MASTER_KEY,
+        },
+      }
+    );
+
+    console.log("User registered successfully:", newUser);
+    return newUser;
   } catch (error) {
     console.error("Error during registration:", error);
     throw error;
   }
 };
 
-// Autentificare utilizator - Folosește MockAPI
+// Autentificare utilizator
 export const login = async (email, password) => {
   try {
-    const response = await axios.get(API_URL);
-    const user = response.data.find(
+    console.log("Attempting to log in...");
+    const response = await axios.get(API_URL, {
+      headers: {
+        "X-Master-Key": MASTER_KEY,
+      },
+    });
+
+    const users = response.data.record.users || [];
+    console.log("Fetched users:", users);
+    const user = users.find(
       (user) => user.email === email && user.password === password
     );
 
     if (user) {
-      return user; // Returnăm datele utilizatorului pentru verificări ulterioare
+      console.log("Login successful for user:", user);
+      return user;
     } else {
+      console.warn("Invalid credentials for email:", email);
       throw new Error("Invalid credentials");
     }
   } catch (error) {
@@ -39,7 +78,8 @@ export const login = async (email, password) => {
   }
 };
 
-// Logout utilizator - opțional
+// Logout utilizator
 export const logout = () => {
-  // Fără `localStorage`, funcția de logout va fi goală sau doar va elimina un eventual token local
+  console.log("Logging out...");
+  localStorage.removeItem("authToken");
 };
