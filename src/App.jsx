@@ -1,28 +1,56 @@
+// src/App.jsx
 import React from "react";
-import { HashRouter as Router, Routes, Route } from "react-router-dom";
-import Login from "./components/User/Login/Login";
-import Register from "./components/User/Register/Register";
-import ForgotPassword from "./components/User/ForgotPassword/ForgotPassword";
-import Dashboard from "./components/Dashboard/Dashboard";
-import Logo from './assets/logo.svg';
-import "./index.css";
+import {
+  HashRouter as Router,
+  Route,
+  Routes,
+  Navigate,
+} from "react-router-dom";
+import { useDispatch } from "react-redux";
+import LoginForm from "./features/auth/LoginForm";
+import RegisterForm from "./features/auth/RegisterForm";
+import Dashboard from "./features/dashboard/Dashboard";
+import { useAuth } from "./hooks/useAuth";
+import { logOut } from "./features/auth/authSlice";
 
-function App() {
+const App = () => {
+  const { isAuthenticated, user } = useAuth();
+  const dispatch = useDispatch();
+
+  const handleLogout = () => {
+    dispatch(logOut());
+  };
+
   return (
-    <div className="backgroundBody">
-      <div className="contentContainer">
-        <Router>
-          <Routes>
-            <Route path="/" element={<Login />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/register" element={<Register />} />
-            <Route path="/forgot" element={<ForgotPassword />} />
-            <Route path="/dashboard/*" element={<Dashboard />} />
-          </Routes>
-        </Router>
+    <Router>
+      <div>
+        {isAuthenticated && (
+          <div>
+            <span>Welcome, {user?.email || "User"}!</span>
+            <button onClick={handleLogout}>Log Out</button>
+          </div>
+        )}
+        <Routes>
+          <Route
+            path="/"
+            element={
+              isAuthenticated ? (
+                <Navigate to="/dashboard" />
+              ) : (
+                <Navigate to="/login" />
+              )
+            }
+          />
+          <Route path="/login" element={<LoginForm />} />
+          <Route path="/register" element={<RegisterForm />} />
+          <Route
+            path="/dashboard"
+            element={isAuthenticated ? <Dashboard /> : <Navigate to="/login" />}
+          />
+        </Routes>
       </div>
-    </div>
+    </Router>
   );
-}
+};
 
 export default App;
