@@ -11,7 +11,6 @@ const TransactionModal = ({ onClose, onAddTransaction }) => {
   const categories = ["Car", "Makeup", "Groceries", "Utilities", "Entertainment"];
 
   const handleAdd = () => {
-    // Verificarea dacă amount și date sunt introduse corect
     if (amount && date) {
       const newTransaction = {
         type,
@@ -20,37 +19,50 @@ const TransactionModal = ({ onClose, onAddTransaction }) => {
         comment,
         category: type === "expense" ? category : null,
       };
-      onAddTransaction(newTransaction); // Apelarea funcției onAddTransaction pentru a adăuga tranzacția
-      // Resetarea câmpurilor după adăugarea tranzacției
+      onAddTransaction(newTransaction);
       setAmount("");
       setDate("");
       setComment("");
       setCategory("");
-      setType("income"); // Resetăm tipul la income
+      setType("income");
       onClose();
     } else {
-      alert("Please fill in all required fields."); // Afișăm un mesaj de eroare dacă câmpurile nu sunt completate
+      alert("Please fill in all required fields.");
     }
   };
 
   return (
     <div className={styles.modal}>
       <div className={styles.modalContent}>
+        <button className={styles.closeButton} onClick={onClose}>&times;</button>
         <h2>Add transaction</h2>
-        <div className={styles.typeSelector}>
-          <button
-            className={type === "income" ? styles.active : ""}
-            onClick={() => setType("income")}
-          >
-            Income
-          </button>
-          <button
-            className={type === "expense" ? styles.active : ""}
-            onClick={() => setType("expense")}
-          >
-            Expense
-          </button>
+        <div className={styles.toggleContainer}>
+          <div className={styles.toggleButton}>
+            <div
+              className={`${styles.toggleOption} ${type === "income" ? styles.active : ""}`}
+              onClick={() => setType("income")}
+            >
+              Income
+            </div>
+            <div
+              className={`${styles.toggleOption} ${type === "expense" ? styles.active : ""}`}
+              onClick={() => setType("expense")}
+            >
+              Expense
+            </div>
+          </div>
         </div>
+        {type === "expense" && (
+          <select
+            value={category}
+            onChange={(e) => setCategory(e.target.value)}
+          >
+            <option value="">Select your category</option>
+            {categories.map((cat, index) => (
+              <option key={index} value={cat}>{cat}</option>
+            ))}
+          </select>
+        )}
         <input
           type="number"
           placeholder="0.00"
@@ -62,17 +74,6 @@ const TransactionModal = ({ onClose, onAddTransaction }) => {
           value={date}
           onChange={(e) => setDate(e.target.value)}
         />
-        {type === "expense" && (
-          <select
-            value={category}
-            onChange={(e) => setCategory(e.target.value)}
-          >
-            <option value="">Select category</option>
-            {categories.map((cat, index) => (
-              <option key={index} value={cat}>{cat}</option>
-            ))}
-          </select>
-        )}
         <input
           type="text"
           placeholder="Comment"
@@ -87,3 +88,4 @@ const TransactionModal = ({ onClose, onAddTransaction }) => {
 };
 
 export default TransactionModal;
+
